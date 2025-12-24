@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Administrar cámaras</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="bg-light">
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h5">Administrar cámaras</h1>
+    <div>
+      <a class="btn btn-outline-secondary" href="/">Volver</a>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <h6>Agregar / Editar cámara</h6>
+          <form id="camForm">
+            <input type="hidden" id="editingId" value="">
+            <div class="mb-2">
+              <label class="form-label">Nombre</label>
+              <input id="nombre" class="form-control" required>
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Latitud</label>
+              <input id="lat" class="form-control" type="number" step="0.0001">
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Longitud</label>
+              <input id="lon" class="form-control" type="number" step="0.0001">
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Device (índice)</label>
+              <input id="device" class="form-control" type="number">
+            </div>
+            <div class="d-flex gap-2">
+              <button class="btn btn-primary" id="saveBtn">Guardar</button>
+              <button class="btn btn-secondary" id="cancelBtn" type="button">Cancelar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="card mt-3">
+        <div class="card-body">
+          <h6>Cámaras <small id="camCount" class="text-muted">(0)</small> <button id="refreshCamsBtn" class="btn btn-sm btn-outline-secondary ms-2">Actualizar</button></h6>
+          <div id="camsList" class="list-group"></div>
+          <div class="mt-2 d-flex gap-2 align-items-center">
+            <input id="deleteByIdInput" class="form-control form-control-sm" placeholder="Eliminar por ID (ej: 1)" style="max-width:220px">
+            <button id="deleteByIdBtn" class="btn btn-sm btn-danger">Eliminar por ID</button>
+            <button id="showRawBtn" class="btn btn-sm btn-outline-secondary">Ver JSON</button>
+          </div>
+          <pre id="rawJsonArea" class="small bg-light border p-2 mt-2" style="display:none; max-height:200px; overflow:auto"></pre>
+
+          <!-- Simple visual list: muestra nombres y botón borrar al lado, sin usar IDs -->
+          <div class="card mt-3">
+            <div class="card-body">
+              <h6>Cámaras disponibles</h6>
+              <div id="camsSimpleList" class="d-flex flex-wrap gap-2"></div>
+            </div>
+          </div>
+
+          <div id="camsEmpty" class="text-muted small mt-2" style="display:none">No hay cámaras configuradas.</div>
+          <div id="camsError" class="alert alert-danger mt-2" style="display:none"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/static/cameras_admin.js"></script>
+</body>
+</html>

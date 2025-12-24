@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Registros</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container py-4">
+  <div class="d-flex justify-content-between mb-3">
+    <h4>Registros completos</h4>
+    <a href="/" class="btn btn-outline-secondary">Volver al Inicio</a>
+  </div>
+  <div class="card shadow-sm">
+    <div class="table-responsive">
+      <table class="table table-striped mb-0">
+        <thead class="table-dark">
+          <tr><th>Cámara</th><th>Fecha</th><th>Hora</th><th>Especie</th><th>Imagen</th><th>Confianza</th><th>Ubicación</th></tr>
+        </thead>
+        <tbody id="records"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<script>
+async function loadAll() {
+  const res = await fetch('/api/todos_registros');
+  const data = await res.json();
+  document.getElementById("records").innerHTML = data.map(r => {
+    // Manejar campos que pueden venir vacíos
+    const img = r.imagen || r.imagen === 0 ? r.imagen : "";
+    const imgCell = img ? `
+      <td><a href="/captures/${encodeURIComponent(img)}" target="_blank">
+        <img src="/captures/${encodeURIComponent(img)}" alt="captura" style="height:48px; object-fit:cover; border-radius:4px;" onerror="this.style.display='none'">
+      </a></td>
+    ` : `<td class="text-muted">—</td>`;
+
+    // confianza puede venir como string o numero; proteger el cálculo
+    let confianza = parseFloat(r.confianza);
+    if (isNaN(confianza)) confianza = 0;
+
+    return `
+      <tr>
+        <td>${r.camara}</td>
+        <td>${r.fecha}</td>
+        <td>${r.hora}</td>
+        <td><strong>${r.especie}</strong></td>
+        ${imgCell}
+        <td>${(confianza * 100).toFixed(1)}%</td>
+        <td>${r.lat || ''}${(r.lat && r.lon) ? ', ' : ''}${r.lon || ''}</td>
+      </tr>
+    `;
+  }).join('');
+}
+loadAll();
+</script>
+</body>
+</html>

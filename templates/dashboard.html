@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard - Monitoreo de Especies</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="bg-light">
+
+<div class="container-fluid py-4">
+  <div class="d-flex justify-content-between mb-3">
+    <h4>Dashboard - Monitoreo de Especies</h4>
+    <div>
+      <a href="/" class="btn btn-outline-secondary me-2">Inicio</a>
+      <button id="toggleLive" class="btn btn-outline-success">Live</button>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="row mb-3">
+    <div class="col-md-4">
+      <label class="form-label">Especie</label>
+      <select id="filterSpecies" class="form-select">
+        <option value="">Todas</option>
+      </select>
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Rango de fechas</label>
+      <input type="date" id="startDate" class="form-control" />
+      <input type="date" id="endDate" class="form-control mt-2" />
+    </div>
+    <div class="col-md-4 d-flex align-items-end">
+      <button id="applyFilters" class="btn btn-primary me-2">Aplicar</button>
+      <button id="resetFilters" class="btn btn-secondary">Reset</button>
+    </div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="row g-3 mb-4" id="kpiRow">
+    <div class="col-md-3">
+      <div class="card p-3 kpi-card">
+        <div class="kpi-title">Total detecciones</div>
+        <div id="kpiTotal" class="kpi-value">0</div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card p-3 kpi-card">
+        <div class="kpi-title">Especies monitoreadas</div>
+        <div id="kpiSpecies" class="kpi-value">0</div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card p-3 kpi-card">
+        <div class="kpi-title">Cámaras activas</div>
+        <div id="kpiCams" class="kpi-value">0</div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card p-3 kpi-card">
+        <div class="kpi-title">Último avistamiento</div>
+        <div id="kpiLast" class="kpi-value">-</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="row g-3 mb-4">
+    <div class="col-lg-6">
+      <div class="card p-3">
+        <h6>Detecciones por especie</h6>
+        <canvas id="barSpecies"></canvas>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card p-3">
+        <h6>Proporción por especie</h6>
+        <canvas id="donutSpecies"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-lg-6">
+      <div class="card p-3">
+        <h6>Detecciones a lo largo del tiempo</h6>
+        <canvas id="lineTime"></canvas>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card p-3">
+        <h6>Detecciones por cámara y especie</h6>
+        <canvas id="stackedCam"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-lg-6">
+      <div class="card p-3">
+        <h6>Detecciones por hora del día</h6>
+        <canvas id="histHour"></canvas>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card p-3">
+        <h6>Mapa de detecciones</h6>
+        <div id="map" style="height:360px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="card p-3 mb-5">
+    <h6>Registros</h6>
+    <table id="tableRecords" class="display" style="width:100%">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Hora</th>
+          <th>Especie</th>
+          <th>Lat</th>
+          <th>Lon</th>
+          <th>Cámara</th>
+          <th>Imagen</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Image modal -->
+<div class="modal fade" id="imgModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body text-center">
+        <img id="modalImg" src="" alt="Captura" class="img-fluid" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="/static/dashboard.js"></script>
+</body>
+</html>
